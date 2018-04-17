@@ -16,12 +16,12 @@ body {
   box-sizing: border-box;
   margin: 1px;
   background-color: #f5f5f5;
-  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.38);
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.38);
 }
 
 .table__cell::after {
   display: block;
-  content: '';
+  content: "";
   padding-bottom: 100%;
 }
 
@@ -30,7 +30,7 @@ body {
 }
 
 .joint {
-  background-color: #ccc;
+  background-color: green;
 }
 
 .fruit {

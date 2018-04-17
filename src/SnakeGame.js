@@ -40,7 +40,7 @@ export default class SnakeGame {
         this.nextFrame();
         break;
     }
-  }
+  }  
 
   nextFrame() {
     clearTimeout(this.timeoutID);
