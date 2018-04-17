@@ -9,22 +9,26 @@ function SnakeGameLogic() {
 }
 
 SnakeGameLogic.prototype.up = function() {
-  // 위쪽 화살표 키를 누르면 실행되는 함수
+  this.joints.unshift({ x: this.joints[0].x, y: this.joints[0].y - 1 });
+  this.joints.pop();
   console.log("up");
 };
 
 SnakeGameLogic.prototype.down = function() {
-  // 아래쪽 화살표 키를 누르면 실행되는 함수
+  this.joints.unshift({ x: this.joints[0].x, y: this.joints[0].y + 1 });
+  this.joints.pop();
   console.log("down");
 };
 
 SnakeGameLogic.prototype.left = function() {
-  // 왼쪽 화살표 키를 누르면 실행되는 함수
+  this.joints.unshift({ x: this.joints[0].x - 1, y: this.joints[0].y });
+  this.joints.pop();
   console.log("left");
 };
 
 SnakeGameLogic.prototype.right = function() {
-  // 오른쪽 화살표 키를 누르면 실행되는 함수
+  this.joints.unshift({ x: this.joints[0].x + 1, y: this.joints[0].y });
+  this.joints.pop();
   console.log("right");
 };
 

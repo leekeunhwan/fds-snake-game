@@ -1,5 +1,5 @@
 // 게임을 렌더링 할 HTML 요소의 선택자
-export const GAME_ROOT = '#game-root';
+export const GAME_ROOT = "#game-root";
 
 // 게임 자동 실행 여부
 export const AUTO_START = true;
