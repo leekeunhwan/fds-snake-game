@@ -1,16 +1,10 @@
-import React from 'react';
-import {render} from 'react-dom';
-import throttle from 'lodash.throttle';
-import {
-  ROWS,
-  COLS,
-  INITIAL_DELAY,
-  DELAY_EXPONENT,
-  GAME_ROOT
-} from './config';
-import SnakeGameLogic from './SnakeGameLogic';
+import React from "react";
+import { render } from "react-dom";
+import throttle from "lodash.throttle";
+import { ROWS, COLS, INITIAL_DELAY, DELAY_EXPONENT, GAME_ROOT } from "./config";
+import SnakeGameLogic from "./SnakeGameLogic";
 
-import './index.css';
+import "./index.css";
 
 export default class SnakeGame {
   delay = INITIAL_DELAY;
@@ -23,30 +17,30 @@ export default class SnakeGame {
   handleKeydown(e) {
     // console.log(`keydown: ${e.key}`);
     switch (e.key) {
-      case 'ArrowUp':
+      case "ArrowUp":
         this.logic.up && this.logic.up();
         this.nextFrame();
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         this.logic.up && this.logic.down();
         this.nextFrame();
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
         this.logic.up && this.logic.left();
         this.nextFrame();
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         this.logic.up && this.logic.right();
         this.nextFrame();
         break;
     }
-  }  
+  }
 
   nextFrame() {
     clearTimeout(this.timeoutID);
     const proceed = this.logic.nextState && this.logic.nextState();
     if (!proceed) {
-      this.gameState = 'end';
+      this.gameState = "end";
       this.cleanup();
     } else {
       this.updateTable();
@@ -57,15 +51,17 @@ export default class SnakeGame {
 
   init() {
     this.delay = INITIAL_DELAY;
-    this.table = new Array(ROWS).fill(null).map(() => new Array(COLS).fill(null));
+    this.table = new Array(ROWS)
+      .fill(null)
+      .map(() => new Array(COLS).fill(null));
     this.logic = new SnakeGameLogic();
     this.updateTable();
     this.draw();
   }
 
   start() {
-    this.gameState = 'running';
-    document.addEventListener('keydown', this.handleKeydown);
+    this.gameState = "running";
+    document.addEventListener("keydown", this.handleKeydown);
     this.intervalID = setInterval(() => {
       this.delay *= DELAY_EXPONENT;
     }, 1000);
@@ -73,7 +69,7 @@ export default class SnakeGame {
   }
 
   cleanup() {
-    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener("keydown", this.handleKeydown);
     clearTimeout(this.timeoutID);
     clearInterval(this.intervalID);
     this.logic.cleanup && this.logic.cleanup();
@@ -84,7 +80,7 @@ export default class SnakeGame {
   }
 
   updateTable() {
-    const {joints, fruit: f} = this.logic;
+    const { joints, fruit: f } = this.logic;
 
     if (!joints || !f) return;
 
@@ -93,12 +89,12 @@ export default class SnakeGame {
     }
 
     if (f.y < this.table.length && f.x < this.table[f.y].length) {
-      this.table[f.y][f.x] = 'fruit';
+      this.table[f.y][f.x] = "fruit";
     }
 
     for (let j of joints) {
       if (j.y < this.table.length && j.x < this.table[j.y].length) {
-        this.table[j.y][j.x] = 'joint';
+        this.table[j.y][j.x] = "joint";
       }
     }
 
@@ -106,26 +102,47 @@ export default class SnakeGame {
   }
 
   template() {
-    return <div className={`game ${this.gameState === 'end' ? 'end' : ''}`}>
-      <div className="table">
-        {this.table.map(cols => <div className="table__row">
-          {cols.map(cell => <div className={`table__cell ${cell === 'joint' ? 'joint' : cell === 'fruit' ? 'fruit' : ''}`}></div>)}
-        </div>)}
+    return (
+      <div className={`game ${this.gameState === "end" ? "end" : ""}`}>
+        <div className="table">
+          {this.table.map(cols => (
+            <div className="table__row">
+              {cols.map(cell => (
+                <div
+                  className={`table__cell ${
+                    cell === "joint" ? "joint" : cell === "fruit" ? "fruit" : ""
+                  }`}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="description">
+          {this.gameState === "end" ? (
+            <div>
+              <span>기록: {this.logic.joints.length}</span>
+              <button
+                className="button restart-button"
+                onClick={e => {
+                  this.init();
+                  this.start();
+                }}
+              >
+                다시 시작
+              </button>
+              {alert(
+                `Game Over! 최종 점수는 ${this.logic.joints.length}점입니다`
+              )}
+            </div>
+          ) : this.gameState === "running" ? (
+            <div>현재 길이: {this.logic.joints.length}</div>
+          ) : (
+            <button className="button start-button" onClick={e => this.start()}>
+              게임 시작
+            </button>
+          )}
+        </div>
       </div>
-      <div className="description">
-        {
-          this.gameState === 'end'
-          ? <div>
-            <span>기록: {this.logic.joints.length}</span>
-            <button className="button restart-button" onClick={e => {this.init(); this.start();}}>다시 시작</button>
-          </div>
-          : this.gameState === 'running'
-          ? <div>
-            현재 길이: {this.logic.joints.length}
-          </div>
-          : <button className="button start-button" onClick={e => this.start()}>게임 시작</button>
-        }
-      </div>
-    </div>
+    );
   }
 }
