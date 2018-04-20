@@ -83,6 +83,7 @@ SnakeGameLogic.prototype.nextState = function() {
   } else {
     this.joints.unshift({ x: this.joints[0].x, y: this.joints[0].y + 1 });
   }
+
   if (this.joints[0].x === this.fruit.x && this.joints[0].y === this.fruit.y) {
     this.fruit = {
       x: Math.floor(Math.random() * COLS),
@@ -104,6 +105,7 @@ SnakeGameLogic.prototype.nextState = function() {
   // 자기 몸에 닿아도 사망 : 몸통을 for 루프로 처리하여 this.joint[1 ~ this.joint.length]를 몸통으로 만들고 this.joint[0]이 몸통에 닿으면 사망시키는 시스템
   // let newHead = this.joints[0];
   // this.joints.some(item => item.x === newHead.x && item.y === newHead.y);
+  // 또한 새로 생성되는 먹이가 몸에 겹치는 버그 고치는 로직
 
   for (let i = 1; i < this.joints.length; i++) {
     if (
@@ -111,10 +113,17 @@ SnakeGameLogic.prototype.nextState = function() {
       this.joints[0].y === this.joints[i].y
     ) {
       return false;
+    } else if (
+      (this.joints[i].x === this.fruit.x &&
+        this.joints[i].y === this.fruit.y) ||
+      (this.joints[0].x === this.fruit.x && this.joints[0].y === this.fruit.y)
+    ) {
+      this.fruit = {
+        x: Math.floor(Math.random() * COLS),
+        y: Math.floor(Math.random() * ROWS)
+      };
     }
   }
-
-  // 뱀이 먹이를 먹었을 때 늘어나는 것과 먹이를 랜덤으로 돌림
 
   console.log(`nextState`);
   return true;
