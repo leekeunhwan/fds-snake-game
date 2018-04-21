@@ -118,6 +118,7 @@ SnakeGameLogic.prototype.nextState = function() {
         this.joints[i].y === this.fruit.y) ||
       (this.joints[0].x === this.fruit.x && this.joints[0].y === this.fruit.y)
     ) {
+      // FIXME: 여전히 새 먹이가 몸통과 겹칠 가능성이 존재함
       this.fruit = {
         x: Math.floor(Math.random() * COLS),
         y: Math.floor(Math.random() * ROWS)
